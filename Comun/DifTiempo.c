@@ -7,11 +7,13 @@
  * Código de Retorno: Microsegundos de diferencia
  * Programador: 
  *****************************************/
-
-// Include del módulo funcional
-#include "Comun.h"
-
 int DifTiempo(struct timeval inicio,struct timeval fin)
 {
-    // Código del alumno
+    int segundos = fin.tv_sec - inicio.tv_sec;
+    int microsegundos = fin.tv_usec - inicio.tv_usec;
+
+    //segundos a microsegundos y suma
+    int Diff = (segundos * 1000000) + microsegundos;
+    
+    return Diff;
 }
