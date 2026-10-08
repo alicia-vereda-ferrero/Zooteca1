@@ -5,7 +5,7 @@
  * Descripción: Calcula los microsegundos de diferencia entre ambos tiempos
  * Reglas de uso: 
  * Código de Retorno: Microsegundos de diferencia
- * Programador: 
+ * Programador: Mark Weber Sainz
  *****************************************/
 int DifTiempo(struct timeval inicio,struct timeval fin)
 {
