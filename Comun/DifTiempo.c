@@ -7,7 +7,10 @@
  * Código de Retorno: Microsegundos de diferencia
  * Programador: Mark Weber Sainz
  *****************************************/
-int DifTiempo(struct timeval inicio,struct timeval fin)
+#include <sys/time.h>
+
+
+ int DifTiempo(struct timeval inicio,struct timeval fin)
 {
     int segundos = fin.tv_sec - inicio.tv_sec;//tv_sec es una libreria interna de los archivos del ordenador 
     int microsegundos = fin.tv_usec - inicio.tv_usec;//tv_usec es una libreria interna del ordenador 
