@@ -6,7 +6,7 @@
  *              los animales en memoria y libera la memoria asignada.
  * Reglas de uso: 
  * Código de Retorno:
- * Programador: Naroa Rojo
+ * Programador: Naroa Rojo, Alicia Vereda, Mark Weber. 19/10/2026
  *****************************************/
 
 #include "Ficheros.h"
