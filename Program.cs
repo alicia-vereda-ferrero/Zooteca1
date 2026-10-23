@@ -1,4 +1,5 @@
-﻿using System;
+//para quien lo vaya a enviar este archivo hay que sacarlo del la carpeta de zooteca porque es un proyecto distinto que se ejecuta por separado 
+using System;
 using System.IO;
 using System.Diagnostics;
 
