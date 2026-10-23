@@ -5,7 +5,7 @@
  * Descripción: Calcula los microsegundos de diferencia entre ambos tiempos
  * Reglas de uso: 
  * Código de Retorno: Microsegundos de diferencia
- * Programador: Mark Weber Sainz
+ * Programador: Naroa Rojo Perruca, Alicia Vereda Ferrero y Mark Weber Sainz
  *****************************************/
 #include <sys/time.h>
 
