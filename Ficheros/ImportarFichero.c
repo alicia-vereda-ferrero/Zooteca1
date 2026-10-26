@@ -141,7 +141,7 @@ void ImportarFichero(ANIMAL **Fichas,WINDOW *Wfichero,bool sumar)
         }
 
         //mostrar los animales tratados y descartados
-        mvwprintw(Wfichero,3,19,"%d",k);
+        mvwprintw(Wfichero,3,19,"%d",k + d);
         mvwprintw(Wfichero,3,55,"%d",d);
         wrefresh(Wfichero);
     }
