@@ -112,8 +112,9 @@ void ImportarFichero(ANIMAL **Fichas,WINDOW *Wfichero,bool sumar)
         resto=linea;
         for (i = 0;i < 6;i++) {
             campo=strsep(&resto,";");
-            if (campo == NULL || strlen(campo) == 0)
+            if (campo == NULL || strlen(campo) == 0){
                 datos[i]=NULL;
+            }
             else {
                 datos[i]=malloc(strlen(campo)+1);
                 strcpy(datos[i],campo);
@@ -122,9 +123,11 @@ void ImportarFichero(ANIMAL **Fichas,WINDOW *Wfichero,bool sumar)
 
         //guardar el animal o descartarlo si no tiene Genero
         if (datos[2] == NULL) {
-            for (i = 0;i < 6;i++)
+            for (i = 0;i < 6;i++){
                 free(datos[i]);
+            }
             d++;
+                
         }
         else {
             (*Fichas)[p].Clase=datos[0];
@@ -138,7 +141,7 @@ void ImportarFichero(ANIMAL **Fichas,WINDOW *Wfichero,bool sumar)
         }
 
         //mostrar los animales tratados y descartados
-        mvwprintw(Wfichero,3,19,"%d",k + d);
+        mvwprintw(Wfichero,3,19,"%d",k);
         mvwprintw(Wfichero,3,55,"%d",d);
         wrefresh(Wfichero);
     }
@@ -156,10 +159,11 @@ void ImportarFichero(ANIMAL **Fichas,WINDOW *Wfichero,bool sumar)
     strcpy(Estadisticas.Fichero,NombreFichero);
 
     //informar del resultado
-    if (sumar == true)
+    if (sumar == true){
         sprintf(mensaje,"Se han sumado %d animales y se han descartado %d", k, d);
-    else
+    }else{
         sprintf(mensaje,"Se han cargado %d animales y se han descartado %d", k, d);
     VentanaError(mensaje);
+    }
     return;
 }
