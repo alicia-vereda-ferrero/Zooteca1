@@ -13,7 +13,7 @@
 
 #include "Ficheros.h"
 
-oid ImportarFichero(ANIMAL **Fichas,WINDOW *Wfichero,bool sumar)
+void ImportarFichero(ANIMAL **Fichas,WINDOW *Wfichero,bool sumar)
 {
     char NombreFichero[52];
     char linea[512];        //aqui va cada linea que leemos del csv
