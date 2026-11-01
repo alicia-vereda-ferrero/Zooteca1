@@ -23,30 +23,34 @@ void ImportarFichero(ANIMAL **Fichas,WINDOW *Wfichero,bool sumar)
     FILE *Fichero;
     struct timeval Inicio;
     struct timeval Fin;
-    int n;                  // uantas lineas tiene el fichero (contando la cabecera)
+    int n;                  //cuantas lineas tiene el fichero (contando la cabecera)
     int d;                  //cuantos anmales hemos descartado
     int a;                  //cuantos animales hay en el array, y tambien donde metemos el siguiente
     int i;
 
-    // si es importar no puede haber animales, y si es sumar tiene que haberlos. ponemos el titulo de cada uno
+    // si es importar no puede haber animales cargados
+    if (sumar == false && Estadisticas.NumeroFichas != 0) {
+        VentanaError("Hay fichas de animales");
+        return;
+    }
+
+    // si es sumar tiene que haber animales cargados
+    if (sumar == true && Estadisticas.NumeroFichas == 0) {
+        VentanaError("No hay fichas de animales");
+        return;
+    }
+
+    // la ventana solo se dibuja la primera vez, asi que ponemos el titulo segun sea importar o sumar
     if (sumar == false) {
-        if (Estadisticas.NumeroFichas != 0) {
-            VentanaError("Hay fichas de animales");
-            return;
-        }
         mvwprintw(Wfichero,0,21,"  Importar fichero de animales  ");
     }
     else {
-        if (Estadisticas.NumeroFichas == 0) {
-            VentanaError("No hay fichas de animales");
-            return;
-        }
         mvwprintw(Wfichero,0,21,"   Sumar fichero de animales    ");
     }
-
-    //pintamos la ventana y pedimos el nombre del fichero (se ve lo que escribes y sale el cursor)
     touchwin(Wfichero);
     wrefresh(Wfichero);
+
+    // pedimos el nombre del fichero (se ve lo que escribes y sale el cursor)
     echo();
     curs_set(1);
     NombreFichero[0]=0;
@@ -62,13 +66,14 @@ void ImportarFichero(ANIMAL **Fichas,WINDOW *Wfichero,bool sumar)
         return;
     }
 
-    //apuntamos la hora a la que empieza la carga
+    // apuntamos la hora a la que empieza la carga
     gettimeofday(&Inicio,NULL);
 
-    //contamos las lineas para saber cuantos animales hay (todas menos la cabecera)
+    // contamos las lineas para saber cuantos animales hay (todas menos la cabecera)
     n=0;
-    while (fgets(linea,512,Fichero) != NULL)
+    while (fgets(linea,512,Fichero) != NULL) {
         n++;
+    }
 
     //si solo hay cabecera o esta vacio no hay nada que cargar
     if (n <= 1) {
@@ -89,15 +94,16 @@ void ImportarFichero(ANIMAL **Fichas,WINDOW *Wfichero,bool sumar)
     }
     Estadisticas.MaxFichas=Estadisticas.NumeroFichas+n-1;
 
-    //volvemos al principio del fichero y nos saltamos la cabecera
+    // volvemos al principio del fichero y nos saltamos la cabecera
     rewind(Fichero);
     fgets(linea,512,Fichero);
 
-    //vamos leyendo animal por animal hasta que se acabe el fichero
+    // vamos leyendo animal por animal hasta que se acabe el fichero
     d=0;
     a=Estadisticas.NumeroFichas;
     while (fgets(linea,512,Fichero) != NULL) {
-        //quitamos el salto de linea del final, si no se nos queda pegado al ultimo campo
+
+        // quitamos el salto de linea del final, si no se nos queda pegado al ultimo campo
         for (i=0;linea[i] != 0;i++) {
             if (linea[i] == '\n' || linea[i] == '\r') {
                 linea[i]=0;
@@ -109,13 +115,15 @@ void ImportarFichero(ANIMAL **Fichas,WINDOW *Wfichero,bool sumar)
         puntero=linea;
         for (i=0;i<6;i++) {
             token[i]=strsep(&puntero,";");
-            if (token[i] == NULL)
+            if (token[i] == NULL) {
                 token[i]="";
+            }
         }
 
         //si no tiene genero lo descartamos, si no copiamos cada campo a su propia memoria
-        if (strlen(token[2]) == 0)
+        if (strlen(token[2]) == 0) {
             d++;
+        }
         else {
             (*Fichas)[a].Clase=malloc(strlen(token[0])+1);
             strcpy((*Fichas)[a].Clase,token[0]);
@@ -138,21 +146,22 @@ void ImportarFichero(ANIMAL **Fichas,WINDOW *Wfichero,bool sumar)
             a++;
         }
 
-        // vamos poniendo en la ventana cuantos animales hay ya en total y cuantos hemos descartado
+        //vamos poniendo en la ventana cuantos animales hay ya en total y cuantos hemos descartado
         mvwprintw(Wfichero,3,19,"%d    ",a);
         mvwprintw(Wfichero,3,55,"%d    ",d);
         wrefresh(Wfichero);
     }
 
-    //cerramos el fichero y apuntamos la hora a la que acaba
+    // cerramos el fichero y apuntamos la hora a la que acaba
     fclose(Fichero);
     gettimeofday(&Fin,NULL);
 
     //guardamos los datos en las estadisticas (el nombre se copia porque nombrefichero se borra al salir)
     Estadisticas.NumeroFichas=a;
     Estadisticas.TiempoCarga=DifTiempo(Inicio,Fin);
-    if (Estadisticas.Fichero != NULL)
+    if (Estadisticas.Fichero != NULL) {
         free(Estadisticas.Fichero);
+    }
     Estadisticas.Fichero=malloc(strlen(NombreFichero)+1);
     strcpy(Estadisticas.Fichero,NombreFichero);
 
