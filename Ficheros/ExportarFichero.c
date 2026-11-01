@@ -6,7 +6,7 @@
  *              de todos los animales en el fichero.
  * Reglas de uso: 
  * Código de Retorno:
- * Programador: Naroa Rojo, Alicia Vereda y Mark Weber. 19/10/2026
+ * Programador: Naroa Rojo, Alicia Vereda y Mark Weber. 29/10/2026
  *****************************************/
 
 #include "Ficheros.h"
@@ -19,7 +19,6 @@ void ExportarFichero(ANIMAL **Fichas,WINDOW *Wfichero)
 
 
     //Comprobar si hay animales para exportar
-
     if(*Fichas == NULL) {
         VentanaError("No hay animales para exportar");
         return;
@@ -50,8 +49,8 @@ void ExportarFichero(ANIMAL **Fichas,WINDOW *Wfichero)
         curs_set(0);
         noecho();
         
-        //Abrir el fichero para escritura. Si no se puede abrir, mostrar error
-        f = fopen(NombreFichero, "w"); //Abre fichero y devuelve la dirección
+        //Abrir el fichero para escritura
+        f = fopen(NombreFichero, "w"); 
         if(f == NULL) {
             VentanaError("No se pudo abrir el fichero para escritura");
             return;
@@ -65,7 +64,7 @@ void ExportarFichero(ANIMAL **Fichas,WINDOW *Wfichero)
             fprintf(f, "%s;%s;%s;%s;%s;%s\n", (*Fichas)[i].Clase ? (*Fichas)[i].Clase : "", (*Fichas)[i].Orden ? (*Fichas)[i].Orden : "", (*Fichas)[i].Genero ? (*Fichas)[i].Genero : "", (*Fichas)[i].Especie ? (*Fichas)[i].Especie : "", (*Fichas)[i].Peso ? (*Fichas)[i].Peso : "", (*Fichas)[i].Cerebro ? (*Fichas)[i].Cerebro : "");
         }
 
-        //Cerrar el fichero
+        
         fclose(f);
 
         //Mostrar número de animales exportados
@@ -74,11 +73,8 @@ void ExportarFichero(ANIMAL **Fichas,WINDOW *Wfichero)
         touchwin(Wfichero);
         wrefresh(Wfichero);
 
-
-        //Mostrar mensaje de éxito
         VentanaError("Fichero exportado");
 
 
     }
-
 }
