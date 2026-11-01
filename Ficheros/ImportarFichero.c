@@ -17,30 +17,31 @@ void ImportarFichero(ANIMAL **Fichas,WINDOW *Wfichero,bool sumar)
 {
     char NombreFichero[52];
     char linea[512];        //aqui va cada linea que leemos del csv
-    char mensaje[80];       //para montar el mensaje final con los numeros
+    char mensaje[80];       //para montar los mensajes de error con numeros
     char *puntero;          //lo que le pasamos a strsep, va avanzando por la linea
-    char *token[6];         // los 6 trozos de la linea: clase, orden, genero, especie, peso y cerebro
+    char *token[6];         //los 6 trozos de la linea: clase, orden, genero, especie, peso y cerebro
     FILE *Fichero;
     struct timeval Inicio;
     struct timeval Fin;
-    int n;                  //cuantas lineas tiene el fichero(contando la cabecera)
-    int t;                  //cuantos anmales llevamos tratados
-    int d;                  //cuantos animales hemos descartado
-    int a;                  //posicion del array donde metemos el animal
+    int n;                  // uantas lineas tiene el fichero (contando la cabecera)
+    int d;                  //cuantos anmales hemos descartado
+    int a;                  //cuantos animales hay en el array, y tambien donde metemos el siguiente
     int i;
 
-    //si es importar no puede haber animales, y si es sumar tiene que haberlos
+    // si es importar no puede haber animales, y si es sumar tiene que haberlos. ponemos el titulo de cada uno
     if (sumar == false) {
         if (Estadisticas.NumeroFichas != 0) {
-            VentanaError("Ya hay animales cargados");
+            VentanaError("Hay fichas de animales");
             return;
         }
+        mvwprintw(Wfichero,0,21,"  Importar fichero de animales  ");
     }
     else {
         if (Estadisticas.NumeroFichas == 0) {
-            VentanaError("No hay animales cargados para sumar");
+            VentanaError("No hay fichas de animales");
             return;
         }
+        mvwprintw(Wfichero,0,21,"   Sumar fichero de animales    ");
     }
 
     //pintamos la ventana y pedimos el nombre del fichero (se ve lo que escribes y sale el cursor)
@@ -53,10 +54,11 @@ void ImportarFichero(ANIMAL **Fichas,WINDOW *Wfichero,bool sumar)
     noecho();
     curs_set(0);
 
-    //abrimos el fichero para leer, si no existe nos salimos
+    // abrimos el fichero para leer, si no existe nos salimos
     Fichero=fopen(NombreFichero,"r");
     if (Fichero == NULL) {
-        VentanaError("No se puede abrir el fichero");
+        sprintf(mensaje,"Error %d al abrir '%s'",errno,NombreFichero);
+        VentanaError(mensaje);
         return;
     }
 
@@ -71,16 +73,18 @@ void ImportarFichero(ANIMAL **Fichas,WINDOW *Wfichero,bool sumar)
     //si solo hay cabecera o esta vacio no hay nada que cargar
     if (n <= 1) {
         fclose(Fichero);
-        VentanaError("El fichero no contiene animales");
+        sprintf(mensaje,"El fichero %s esta vacio",NombreFichero);
+        VentanaError(mensaje);
         return;
     }
 
-    /* pedimos memoria para los que ya habia mas los nuevos(n-1 porque la cabecera no cuenta).
+    /* pedimos memoria para los que ya habia mas los nuevos (n-1 porque la cabecera no cuenta).
        si fichas era NULL, realloc hace lo mismo que malloc, y si ya habia animales los mantiene */
     *Fichas=realloc(*Fichas,sizeof(ANIMAL)*(Estadisticas.NumeroFichas+n-1));
     if (*Fichas == NULL) {
         fclose(Fichero);
-        VentanaError("Error al asignar memoria");
+        sprintf(mensaje,"Error %d al alocar %d bytes",errno,(int)(sizeof(ANIMAL)*(Estadisticas.NumeroFichas+n-1)));
+        VentanaError(mensaje);
         return;
     }
     Estadisticas.MaxFichas=Estadisticas.NumeroFichas+n-1;
@@ -90,7 +94,6 @@ void ImportarFichero(ANIMAL **Fichas,WINDOW *Wfichero,bool sumar)
     fgets(linea,512,Fichero);
 
     //vamos leyendo animal por animal hasta que se acabe el fichero
-    t=0;
     d=0;
     a=Estadisticas.NumeroFichas;
     while (fgets(linea,512,Fichero) != NULL) {
@@ -109,8 +112,6 @@ void ImportarFichero(ANIMAL **Fichas,WINDOW *Wfichero,bool sumar)
             if (token[i] == NULL)
                 token[i]="";
         }
-
-        t++;
 
         //si no tiene genero lo descartamos, si no copiamos cada campo a su propia memoria
         if (strlen(token[2]) == 0)
@@ -137,9 +138,9 @@ void ImportarFichero(ANIMAL **Fichas,WINDOW *Wfichero,bool sumar)
             a++;
         }
 
-        //vamos poniendo en la ventana cuantos llevamos
-        mvwprintw(Wfichero,3,19,"%d",t);
-        mvwprintw(Wfichero,3,55,"%d",d);
+        // vamos poniendo en la ventana cuantos animales hay ya en total y cuantos hemos descartado
+        mvwprintw(Wfichero,3,19,"%d    ",a);
+        mvwprintw(Wfichero,3,55,"%d    ",d);
         wrefresh(Wfichero);
     }
 
@@ -155,8 +156,7 @@ void ImportarFichero(ANIMAL **Fichas,WINDOW *Wfichero,bool sumar)
     Estadisticas.Fichero=malloc(strlen(NombreFichero)+1);
     strcpy(Estadisticas.Fichero,NombreFichero);
 
-    //avisamos de que ha ido bien y de cuantos se han cargado
-    sprintf(mensaje,"Cargados %d animales y descartados %d",t-d,d);
-    VentanaError(mensaje);
+    //avisamos de que ha ido bien
+    VentanaError("Fichero importado");
     return;
 }
