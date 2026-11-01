@@ -71,9 +71,9 @@ void Animales(ANIMAL **Fichas)
                 LimpiarAnimal(Wanimal);
                 wcolor_set(Wanimal,9,NULL);
                 mvwprintw(Wanimal,2,23,"%d",NumeroAnimal);
-                mvwprintw(Wanimal,3,23,"%.51s",(*Fichas)[NumeroAnimal-1].Genero);
-                mvwprintw(Wanimal,4,23,"%.51s",(*Fichas)[NumeroAnimal-1].Clase);
-                mvwprintw(Wanimal,5,23,"%.51s",(*Fichas)[NumeroAnimal-1].Orden);
+                mvwprintw(Wanimal,3,23,"%.51s",(*Fichas)[NumeroAnimal-1].Clase);
+                mvwprintw(Wanimal,4,23,"%.51s",(*Fichas)[NumeroAnimal-1].Orden);
+                mvwprintw(Wanimal,5,23,"%.51s",(*Fichas)[NumeroAnimal-1].Genero);
                 mvwprintw(Wanimal,6,23,"%.51s",(*Fichas)[NumeroAnimal-1].Especie);
                 mvwprintw(Wanimal,7,23,"%.51s",(*Fichas)[NumeroAnimal-1].Peso);
                 mvwprintw(Wanimal,8,23,"%.51s",(*Fichas)[NumeroAnimal-1].Cerebro);
