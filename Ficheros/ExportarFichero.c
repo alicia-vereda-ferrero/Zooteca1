@@ -69,6 +69,7 @@ void ExportarFichero(ANIMAL **Fichas,WINDOW *Wfichero)
 
         //Mostrar número de animales exportados
         mvwprintw(Wfichero, 3,  19, "%d", Estadisticas.NumeroFichas);
+        mvwprintw(Wfichero, 3,  55, "%d", 0); //El número de descartados será siempre 0
 
         touchwin(Wfichero);
         wrefresh(Wfichero);
