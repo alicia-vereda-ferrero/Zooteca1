@@ -25,6 +25,22 @@ void ExportarFichero(ANIMAL **Fichas,WINDOW *Wfichero)
         return;
     } else {
 
+        //Borrar el titulo anterior
+        mvwprintw(Wfichero, 0, 23, "                                 ");
+
+        //Poner el título de exportar
+        mvwprintw(Wfichero, 0, 24, "Exportar fichero de animales");
+        touchwin(Wfichero);
+        wrefresh(Wfichero);
+
+        //Limpiar la ventana
+        mvwprintw(Wfichero,2,22,"                                                     ");
+        mvwprintw(Wfichero,3,19,"                ");
+        mvwprintw(Wfichero,3,55,"                    ");
+        touchwin(Wfichero);
+        wrefresh(Wfichero);
+
+
         //Capturar el nombre del fichero a exportar
         curs_set(1);
         echo();
@@ -54,6 +70,10 @@ void ExportarFichero(ANIMAL **Fichas,WINDOW *Wfichero)
 
         //Mostrar número de animales exportados
         mvwprintw(Wfichero, 3,  19, "%d", Estadisticas.NumeroFichas);
+
+        touchwin(Wfichero);
+        wrefresh(Wfichero);
+
 
         //Mostrar mensaje de éxito
         VentanaError("Fichero exportado");
