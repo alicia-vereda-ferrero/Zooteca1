@@ -42,6 +42,7 @@ void DescartarFichero(ANIMAL **Fichas,WINDOW *Wfichero)
             //Actualizar estadísticas
             Estadisticas.NumeroFichas = 0;
             Estadisticas.MaxFichas = 0;
+            Estadisticas.TiempoCarga = 0;
 
             
             VentanaError("Se han descartado todos los animales");
